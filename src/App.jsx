@@ -26,25 +26,48 @@ export default function App() {
     localStorage.setItem(storageKey, JSON.stringify({ envelopes, transactions }))
   }, [envelopes, transactions])
 
-  const testEnvelopes = [{
-    name: 'Groceries',
-    amount: 500,
-    spent: 200,
-    remaining: 300
+  function handleTransaction({ type, amount, envelopeId, toEnvelopeId, note, date }) {
+    // Build Transaction Record
+    const transaction = {
+      id: crypto.randomUUID(),
+      type,
+      amount,
+      envelopeId,
+      toEnvelopeId,
+      note,
+      date
+    }
+    // Update envelope balances
+    setEnvelopes(prev => prev.map(env => {
+      if (env.id === envelopeId) {
+        return {
+          ...env,
+          balance: type === 'income' ? env.balance + amount : env.balance - amount
+        }
+      }
+      if (type === 'transfer' && env.id === toEnvelopeId) {
+        return { ...env, balance: env.balance + amount }
+      }
+      return env
+    }))
+
+    setTransactions(prev => [...prev, transaction])
   }
-    , {
-    name: 'Entertainment',
-    amount: 300,
-    spent: 150,
-    remaining: 150
-  }]
-
-
-
   return (
-    <div className="App">
-      <Dashboard />
-      <EnvelopeList envelopes={testEnvelopes} />
+    <div className="min-h-screen bg-gray-50 p-4">
+      <Dashboard envelopes={envelopes} />
+      <EnvelopeList
+        envelopes={envelopes}
+        onOpenModal={setModal}
+      />
+      {modal && (
+        <TransactionModal
+          modal={modal}
+          envelopes={envelopes}
+          onClose={() => setModal(null)}
+          onSubmit={handleTransaction}
+        />
+      )}
     </div>
   )
 }

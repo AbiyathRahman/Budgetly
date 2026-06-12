@@ -1,11 +1,15 @@
 import EnvelopeCard from "./EnvelopeCard"
 
-export default function EnvelopeList(props) {
+export default function EnvelopeList({ envelopes, onOpenModal }) {
+    if (envelopes.length === 0) {
+        return (
+            <p className="text-center text-grey-400 mt-12">No envelopes yet. Start by creating one!</p>
+        )
+    }
     return (
-        <div>
-            <h1>Envelope List</h1>
-            {props.envelopes.map(envelope => (
-                <EnvelopeCard key={envelope.name} {...envelope} />
+        <div className="grid grid cols-1 gap-4 mt-4">
+            {envelopes.map(env => (
+                <EnvelopeCard key={env.id} envelope={env} onOpenModal={onOpenModal} />
             ))}
         </div>
     )
