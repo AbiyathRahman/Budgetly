@@ -14,6 +14,7 @@ export default function EnvelopeDetail({ envelope, transactions, onClose, onOpen
     const [isEditing, setIsEditing] = useState(false)
     const [editName, setEditName] = useState(envelope.name)
     const [editColor, setEditColor] = useState(envelope.color)
+    const [editCategory, setEditCategory] = useState(envelope.category)
 
     const envelopeTransactions = transactions.filter(t => t.envelopeId === envelope.id || t.toEnvelopeId === envelope.id).sort((a, b) => new Date(b.Date) - new Date(a.Date))
 
@@ -26,7 +27,7 @@ export default function EnvelopeDetail({ envelope, transactions, onClose, onOpen
     function handleSaveEdit() {
         if (!editName.trim()) return
         onSaveEdit({
-            ...envelope, name: editName.trim(), color: editColor
+            ...envelope, name: editName.trim(), color: editColor, category: editCategory
         })
         setIsEditing(false)
     }
@@ -78,6 +79,20 @@ export default function EnvelopeDetail({ envelope, transactions, onClose, onOpen
                                     outlineOffset: "2px",
                                 }}
                             />
+                        ))}
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                        {["variable", "fixed", "savings"].map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setEditCategory(cat)}
+                                className={`py-1.5 rounded-xl text-xs font-medium capitalize transition-colors ${editCategory === cat
+                                    ? "bg-gray-900 text-white"
+                                    : "bg-gray-100 text-gray-600"
+                                    }`}
+                            >
+                                {cat}
+                            </button>
                         ))}
                     </div>
                     <div className="flex gap-2">

@@ -17,6 +17,7 @@ export default function AddEnvelopeModal({ onClose, onSubmit }) {
     const [color, setColor] = useState(PRESET_COLORS[0])
     const [targetAmount, setTargetAmount] = useState('')
     const [dueDate, setDueDate] = useState('')
+    const [category, setCategory] = useState('variable')
 
     function handleSubmit() {
         if (!name.trim()) return
@@ -28,6 +29,7 @@ export default function AddEnvelopeModal({ onClose, onSubmit }) {
             color,
             targetAmount: parseFloat(targetAmount) || null,
             dueDate: dueDate || null,
+            category,
         })
         onClose()
     }
@@ -99,6 +101,23 @@ export default function AddEnvelopeModal({ onClose, onSubmit }) {
                             onChange={e => setDueDate(e.target.value)}
                             className="border border-gray-200 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         />
+                    </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm text-gray-600">Category</label>
+                    <div className="grid grid-cols-3 gap-2">
+                        {["variable", "fixed", "savings"].map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setCategory(cat)}
+                                className={`py-2 rounded-xl text-sm font-medium capitalize transition-colors ${category === cat
+                                    ? "bg-gray-900 text-white"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                    }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
                     </div>
                 </div>
 

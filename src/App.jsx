@@ -78,7 +78,7 @@ export default function App() {
       <EnvelopeList
         envelopes={envelopes}
         onOpenModal={setModal}
-        onOpenEnvelopeDetail={setSelectedEnvelope}
+        onSelectEnvelope={setSelectedEnvelope}
       />
       <button
         onClick={() => setShowAddEnvelope(true)}
