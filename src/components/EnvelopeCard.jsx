@@ -8,62 +8,63 @@ export default function EnvelopeCard({ envelope, onOpenModal, onSelect }) {
     return (
         <div
             onClick={() => onSelect(envelope)}
-            className="cursor-pointer"
+            className="bg-white border border-gray-100 rounded-xl overflow-hidden cursor-pointer hover:shadow-sm transition-shadow"
         >
-            {/* Flap */}
-            <div
-                className="relative rounded-t-sm px-4 pt-3 pb-8 flex items-start justify-between"
-                style={{ backgroundColor: color }}
+            {/* SVG flap — no overflow issues */}
+            <svg
+                viewBox="0 0 360 80"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="none"
+                className="w-full block"
+                style={{ height: '72px' }}
             >
-                <span className="text-sm font-medium text-white/90">{name}</span>
-                <div className="w-2.5 h-2.5 rounded-full bg-white/50 mt-0.5" />
-                {/* Triangle fold */}
-                <div
-                    className="absolute bottom-0 left-0 right-0"
-                    style={{
-                        width: 0,
-                        height: 0,
-                        borderLeft: '200px solid transparent',
-                        borderRight: '200px solid transparent',
-                        borderTop: `28px solid rgba(0,0,0,0.12)`,
-                    }}
-                />
-            </div>
+                <rect width="360" height="80" fill={color} />
+                <polygon points="0,0 360,0 180,52" fill="rgba(0,0,0,0.10)" />
+                <text
+                    x="16" y="22"
+                    fontSize="13"
+                    fontWeight="500"
+                    fill="rgba(255,255,255,0.95)"
+                    fontFamily="sans-serif"
+                >
+                    {name}
+                </text>
+                <circle cx="344" cy="16" r="5" fill="rgba(255,255,255,0.4)" />
+            </svg>
 
-            {/* Body */}
-            <div className="bg-white border border-t-0 border-gray-100 rounded-b-xl px-4 pt-3 pb-3 flex flex-col gap-3">
+            {/* Card body */}
+            <div className="px-4 pt-3 pb-4 flex flex-col gap-3">
 
-                {/* Balance row */}
                 <div className="flex items-end justify-between">
                     <div>
-                        <p className="text-xs text-gray-400">Available</p>
-                        <p className={`text-2xl font-bold ${isNegative ? 'text-red-500' : 'text-gray-900'}`}>
+                        <p className="text-xs text-gray-400 mb-0.5">Available</p>
+                        <p className={`text-2xl font-semibold ${isNegative ? 'text-red-700' : 'text-gray-900'}`}>
                             ${balance.toFixed(2)}
                         </p>
                     </div>
                     {fund?.funded && (
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                        <span className="text-xs bg-green-100 text-green-800 font-medium px-2 py-1 rounded-full">
                             Funded ✓
                         </span>
                     )}
                     {fund && !fund.funded && !fund.overdue && (
-                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                        <span className="text-xs bg-blue-100 text-blue-800 font-medium px-2 py-1 rounded-full">
                             Save ${fund.perMonth}/mo
                         </span>
                     )}
                     {fund?.overdue && (
-                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
-                            Overdue
+                        <span className="text-xs bg-red-100 text-red-800 font-medium px-2 py-1 rounded-full">
+                            Overdrawn
                         </span>
                     )}
                 </div>
 
-                {/* Progress bar — only if sinking fund active */}
+                {/* Progress bar */}
                 {fund && !fund.funded && !fund.overdue && (
                     <>
-                        <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                        <div className="w-full bg-gray-100 rounded-full h-1 overflow-hidden">
                             <div
-                                className="h-1.5 rounded-full transition-all"
+                                className="h-1 rounded-full transition-all"
                                 style={{
                                     width: `${Math.min((balance / targetAmount) * 100, 100)}%`,
                                     backgroundColor: color,
@@ -81,19 +82,19 @@ export default function EnvelopeCard({ envelope, onOpenModal, onSelect }) {
                 <div className="grid grid-cols-3 gap-1.5">
                     <button
                         onClick={e => { e.stopPropagation(); onOpenModal({ type: 'income', envelopeId: id }) }}
-                        className="bg-green-50 text-green-700 text-xs font-medium py-1.5 rounded-lg hover:bg-green-100 transition-colors"
+                        className="bg-green-50 text-green-800 text-xs font-medium py-2 rounded-lg hover:bg-green-100 transition-colors"
                     >
                         + Income
                     </button>
                     <button
                         onClick={e => { e.stopPropagation(); onOpenModal({ type: 'expense', envelopeId: id }) }}
-                        className="bg-red-50 text-red-600 text-xs font-medium py-1.5 rounded-lg hover:bg-red-100 transition-colors"
+                        className="bg-red-50 text-red-800 text-xs font-medium py-2 rounded-lg hover:bg-red-100 transition-colors"
                     >
                         − Expense
                     </button>
                     <button
                         onClick={e => { e.stopPropagation(); onOpenModal({ type: 'transfer', envelopeId: id }) }}
-                        className="bg-blue-50 text-blue-600 text-xs font-medium py-1.5 rounded-lg hover:bg-blue-100 transition-colors"
+                        className="bg-blue-50 text-blue-800 text-xs font-medium py-2 rounded-lg hover:bg-blue-100 transition-colors"
                     >
                         ⇄ Transfer
                     </button>
