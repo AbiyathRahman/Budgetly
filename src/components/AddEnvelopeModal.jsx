@@ -45,7 +45,7 @@ export default function AddEnvelopeModal({ onClose, onSubmit }) {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-bold text-slate-800">New Envelope</h2>
-                    <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-xl">\u2715</button>
+                    <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-xl">&larr;</button>
                 </div>
 
                 {/* Name */}
