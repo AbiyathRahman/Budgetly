@@ -13,7 +13,12 @@ const storageKey = 'budget-app-data'
 function loadData() {
   try {
     const data = localStorage.getItem(storageKey)
-    return data ? JSON.parse(data) : { envelopes: [], transactions: [] }
+    const parsed = data ? JSON.parse(data) : { envelopes: [], transactions: [] }
+    const envelopes = parsed.envelopes.map(env => ({
+      ...env,
+      category: env.category ?? "variable"
+    }))
+    return { envelopes, transactions: parsed.transactions }
   } catch {
     return { envelopes: [], transactions: [] }
   }
